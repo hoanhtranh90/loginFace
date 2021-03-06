@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Login FaceBook</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width" />
+    <base href="/" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+</head>
+<body>
+<div>
+    <span>sign On with Facebook</span>
+</div>
+<div>
+    <div class="unauthenticated">
+        <a href="/login">Login</a>
+    </div>
+    <div class="authenticated" style="display: none">
+        Logged in as: <span id="user"></span>
+        <div>
+            <button onClick="logout()">Logout</button>
+        </div>
+    </div>
+</div>
+<script>
+    if (window.location.hash == '#_=_'){
+        history.replaceState
+            ? history.replaceState(null, null, window.location.href.split('#')[0])
+            : window.location.hash = '';
+    }
+    $.get("/user", function(data) {
+        $("#user").html(data.userAuthentication.details.name);
+        $(".unauthenticated").hide()
+        $(".authenticated").show()
+    });
+    var logout = function() {
+        $.post("/logout", function() {
+            $("#user").html('');
+            $(".unauthenticated").show();
+            $(".authenticated").hide();
+        });
+        return true;
+    }
+</script>
+</body>
+</html>
